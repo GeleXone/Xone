@@ -253,3 +253,45 @@ void quat_conjugate(vec_t* quat) {
 
 	return 0;
 }
+
+void normalize(vec_t* vec) {
+	double length = sqrt(vec->vec[0] * vec->vec[0] + vec->vec[1] * vec->vec[1] + vec->vec[2] * vec->vec[2]);
+	if (length > 0) {
+		vec->vec[0] /= length;
+		vec->vec[1] /= length;
+		vec->vec[2] /= length;
+	}
+}
+void cross(vec_t* out, const vec_t* a, const vec_t* b) {
+	out->vec[0] = a->vec[1] * b->vec[2] - a->vec[2] * b->vec[1];
+	out->vec[1] = a->vec[2] * b->vec[0] - a->vec[0] * b->vec[2];
+	out->vec[2] = a->vec[0] * b->vec[1] - a->vec[1] * b->vec[0];
+}
+double dot(const vec_t* a, const vec_t* b) {
+	return a->vec[0] * b->vec[0] + a->vec[1] * b->vec[1] + a->vec[2] * b->vec[2];
+}
+
+void look_at(matrix_t* out, vec_t* eye, vec_t* center, vec_t* up) {
+	vec_t* forward = vec_create(3);
+	vec3_set(forward, center->vec[0] - eye->vec[0], center->vec[1] - eye->vec[1], center->vec[2] - eye->vec[2]);
+	normalize(forward);
+
+	vec_t* right = vec_create(3);
+	cross(right, forward, up);
+
+	vec_t* new_up = vec_create(3);
+	cross(new_up, right, forward);
+
+	for (int i = 0; i < 3; i++) {
+		out->matrix[i][0] = right->vec[i];
+		out->matrix[i][1] = new_up->vec[i];
+		out->matrix[i][2] = -forward->vec[i];
+		out->matrix[i][3] = 0;
+	}
+	out->matrix[3][0] = -dot(right, eye);
+	out->matrix[3][1] = -dot(new_up, eye);
+	out->matrix[3][2] = dot(forward, eye);
+	out->matrix[3][3] = 1;
+
+	return 0;
+}

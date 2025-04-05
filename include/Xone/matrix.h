@@ -33,3 +33,9 @@ void vec4_set(vec_t* vec, double x, double y, double z, double w);
 
 void quat_set(vec_t* quat, vec_t* axis, double angle);
 void quat_conjugate(vec_t* quat);
+
+void normalize(vec_t* vec);
+void cross(vec_t* out, const vec_t* a, const vec_t* b);
+double dot(const vec_t* a, const vec_t* b);
+
+void look_at(matrix_t* out, vec_t* eye, vec_t* center, vec_t* up);

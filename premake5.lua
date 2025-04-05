@@ -1,6 +1,6 @@
 workspace "Xone"
     architecture "x64"
-    startproject "XoneTest"
+    startproject "example"
 
     configurations {
         "Debug",
@@ -14,7 +14,7 @@ IncludeDir = {}
 IncludeDir["Xone"] = {"Xone/include"}
 
 project "Xone"
-	location "Xone"
+	location "."
 	kind "StaticLib"
 	language "C"
 	
@@ -22,18 +22,17 @@ project "Xone"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.c",
-		"%{prj.name}/src/**.cpp",
+		"%{prj.location}/src/**.h",
+		"%{prj.location}/src/**.c",
+		"%{prj.location}/src/**.cpp",
 	}
 
     includedirs {
-		"%{prj.name}/src",
-		"%{prj.name}/include"
+		"%{prj.location}/include"
 	}
 	
-project "XoneTest"
-location "XoneTest"
+project "example"
+location "example"
 kind "ConsoleApp"
 language "C"
 
@@ -49,7 +48,7 @@ files {
 includedirs {
 	"%{prj.name}/src",
 	"%{prj.name}/include",
-	"Xone/include"
+	"include"
 }
 
 links {
